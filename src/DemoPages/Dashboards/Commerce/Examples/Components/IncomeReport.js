@@ -71,6 +71,22 @@ export default class IncomeReport extends Component {
 
     }
 
+    tambahguru(){
+      fetch('https://jsonplaceholder.typicode.com/photos', {
+        method: 'POST',
+        body: JSON.stringify({
+          albumId: this.state.editdata.album,
+          title: this.state.editdata.title,
+          status: this.state.editdata.status
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      })
+        .then(response => response.json())
+        .then(json => console.log(json))
+    }
+
   dataedit(id,value){
     fetch('https://jsonplaceholder.typicode.com/photos/1', {
       method: 'put',
@@ -101,55 +117,62 @@ render() {
 {/* Modal tambah Guru */}
 
            <Modal isOpen={this.state.modal} toggle={this.tguru} className={this.props.className}>
-
+           <Form>
                <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
 
                <ModalBody>
-                   <Form>
+                  
+             <FormGroup>
+               <Label for="exampleEmail" sm={4}>ID</Label>
+               <Col sm={8}>
+                 <Input type="text" id="id" value={this.state.editdata ? this.state.editdata.id : ""}
+                   onChange={(d) => this.handleChange('id', d.target.value)}
+                   name="album" />
+               </Col>
+             </FormGroup>
 
-                       <FormGroup row>
-                           <Label for="exampleEmail" sm={4} size="lg">ID Album</Label>
-                           <Col sm={8}>
-                               <Input type="email" value={} name="email" id="exampleEmail" placeholder="ID Album" />
-                           </Col>
-                       </FormGroup>
+             <FormGroup>
+               <Label for="exampleEmail" sm={4}>ID Album</Label>
+               <Col sm={8}>
+                 <Input type="text" value={this.state.editdata ? this.state.editdata.album : ""}
+                   onChange={(d) => this.handleChange('album', d.target.value)}
+                   name="album" />
+               </Col>
+             </FormGroup>
 
-                       <FormGroup row>
-                           <Label for="exampleEmail" sm={4} size="lg">ID</Label>
-                           <Col sm={8}>
-                               <Input type="email" name="email" id="exampleEmail" placeholder="Id"  />
-                           </Col>
-                       </FormGroup>
+             <FormGroup>
+               <Label for="exampleEmail" sm={4}>Title</Label>
+               <Col sm={8}>
+                 <Input type="text" value={this.state.editdata ? this.state.editdata.title : ""}
+                   onChange={(d) => this.handleChange('title', d.target.value)}
+                   name="album" />
+               </Col>
+             </FormGroup>
 
-                       <FormGroup row>
-                           <Label for="exampleEmail" sm={4} size="lg">Title</Label>
-                           <Col sm={8}>
-                               <Input type="email" name="email" id="exampleEmail" placeholder="Title"  />
-                           </Col>
-                       </FormGroup>
+             <FormGroup>
+               <Label for="exampleEmail2" sm={4}>URL 1</Label>
+               <Col sm={8}>
+                 <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.status : ""}
+                   onChange={(d) => this.handleChange('status', d.target.value)} placeholder="default" />
+               </Col>
+             </FormGroup>
 
-                       <FormGroup row>
-                           <Label for="exampleEmail2" sm={4}>URL</Label>
-                           <Col sm={8}>
-                               <Input type="email" name="email" id="exampleEmail2" placeholder="Link URL" />
-                           </Col>
-                       </FormGroup>
+             <FormGroup>
+               <Label for="exampleEmail2" sm={4}>URL 2</Label>
+               <Col sm={8}>
+                 <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.gambar : ""}
+                   onChange={(d) => this.handleChange('gambar', d.target.value)} placeholder="default" />
+               </Col>
+             </FormGroup>
 
-                       <FormGroup row>
-                           <Label for="exampleEmail" sm={4} size="lg">thumbnailUrl</Label>
-                           <Col sm={8}>
-                               <Input type="email" name="email" id="exampleEmail" placeholder=""  />
-                           </Col>
-                       </FormGroup>
-
-                   </Form>
+                   
                </ModalBody>
 
                <ModalFooter>
                    <Button color="danger" onClick={this.tguru}>Cancel</Button>
-                   <Button color="primary" onClick={this.tguru}>Do Something</Button>{" "}
+             <Button color="primary" onClick={(d) => this.tambahguru(d.target.value)}>Simpan</Button>{" "}
                </ModalFooter>
-
+              </Form>
            </Modal>
 
 {/* END Modal tambah Guru */}
@@ -166,7 +189,7 @@ render() {
                            <Col sm={8}>
                                <Input type="text" id="id" value={this.state.editdata ? this.state.editdata.id : ""}
                                onChange={(d) => this.handleChange('id', d.target.value)} 
-                               name="album" />
+                               name="ID" />
                            </Col>
                        </FormGroup>
 
@@ -175,7 +198,7 @@ render() {
                            <Col sm={8}>
                                <Input type="text" value={this.state.editdata ? this.state.editdata.album : ""}
                                    onChange={(d) => this.handleChange('album', d.target.value)}
-                                   name="album" />
+                                   name="idalbum" />
                            </Col>
                        </FormGroup>
 
