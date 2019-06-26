@@ -15,7 +15,8 @@ export default class IncomeReport extends Component {
         
         this.tguru = this.tguru.bind(this);
         this.editguru = this.editguru.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+      this.handleChange = this.handleChange.bind(this);
+        this.dataedit = this.dataedit.bind(this);
     }
     
     componentDidMount() {
@@ -71,28 +72,21 @@ export default class IncomeReport extends Component {
     }
 
   dataedit(id,value){
-    // const API = 'https://jsonplaceholder.typicode.com/photos';
-    //   const dataform = new dataform();
-    //   dataform.append('albumId',value);
-      
-    //   const option = {
-    //     method:'post',
-    //     body: dataform
-    //   }
-
-    //   fetch(API,option)
-    //   .then(res => res.json())
-    //   .then(
-    //     (result) => {
-    //       this.setState({
-    //         response: result,
-    //       })
-    //     }
-    //   )
-    console.log(value);
+    fetch('https://jsonplaceholder.typicode.com/photos/1', {
+      method: 'put',
+      body: JSON.stringify({
+        albumId: this.state.editdata.album,
+        title: this.state.editdata.title,
+        status: this.state.editdata.status
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+      .then(response => response.json())
+      .then(json => console.log(json))
 
     }
-
 
 render() {
 
@@ -116,7 +110,7 @@ render() {
                        <FormGroup row>
                            <Label for="exampleEmail" sm={4} size="lg">ID Album</Label>
                            <Col sm={8}>
-                               <Input type="email" name="email" id="exampleEmail" placeholder="ID Album" />
+                               <Input type="email" value={} name="email" id="exampleEmail" placeholder="ID Album" />
                            </Col>
                        </FormGroup>
 
@@ -163,13 +157,13 @@ render() {
 {/* Modal Edit Guru */}
 
            <Modal isOpen={this.state.edit} toggle={this.editguru} className={this.props.className}>
-               <Form >
+               <Form>
                    <ModalHeader toggle={this.editguru}  >Modal title</ModalHeader>
                <ModalBody>
                    
                        <FormGroup row>
-                           <Label for="exampleEmail" sm={2}>ID</Label>
-                           <Col sm={10}>
+                           <Label for="exampleEmail" sm={4}>ID</Label>
+                           <Col sm={8}>
                                <Input type="text" id="id" value={this.state.editdata ? this.state.editdata.id : ""}
                                onChange={(d) => this.handleChange('id', d.target.value)} 
                                name="album" />
@@ -177,8 +171,8 @@ render() {
                        </FormGroup>
 
                        <FormGroup row>
-                           <Label for="exampleEmail" sm={2}>ID Album</Label>
-                           <Col sm={10}>
+                           <Label for="exampleEmail" sm={4}>ID Album</Label>
+                           <Col sm={8}>
                                <Input type="text" value={this.state.editdata ? this.state.editdata.album : ""}
                                    onChange={(d) => this.handleChange('album', d.target.value)}
                                    name="album" />
@@ -186,8 +180,8 @@ render() {
                        </FormGroup>
 
                        <FormGroup row>
-                           <Label for="exampleEmail" sm={2}>Title</Label>
-                           <Col sm={10}>
+                           <Label for="exampleEmail" sm={4}>Title</Label>
+                           <Col sm={8}>
                                <Input type="text" value={this.state.editdata ? this.state.editdata.title : ""}
                                    onChange={(d) => this.handleChange('title', d.target.value)}
                                    name="album" />
@@ -195,16 +189,16 @@ render() {
                        </FormGroup>
 
                        <FormGroup row>
-                           <Label for="exampleEmail2" sm={2}>URL 1</Label>
-                           <Col sm={10}>
+                           <Label for="exampleEmail2" sm={4}>URL 1</Label>
+                           <Col sm={8}>
                                <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.status : ""} 
                                onChange={(d) => this.handleChange('status', d.target.value)} placeholder="default" />
                            </Col>
                        </FormGroup>
 
                        <FormGroup row>
-                           <Label for="exampleEmail2" sm={2}>URL 2</Label>
-                           <Col sm={10}>
+                           <Label for="exampleEmail2" sm={4}>URL 2</Label>
+                           <Col sm={8}>
                                <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.gambar : ""}
                                    onChange={(d) => this.handleChange('gambar', d.target.value)} placeholder="default" />
                            </Col>
@@ -243,25 +237,21 @@ render() {
                    data={items}
                    columns={[
                      {
-                       Header: "Name",
+                       Header: "Identitas",
                        columns: [
-                         {
-                           Header: "ID Album",
-                           accessor: "album"
-                         },
                          {
                            Header: "ID",
                            accessor: "id"
+                         },
+                         {
+                           Header: "Title",
+                           accessor: "title"
                          }
                        ]
                      },
                      {
                        Header: "Info",
                        columns: [
-                         {
-                           Header: "Title",
-                           accessor: "title"
-                         },
                          {
                            Header: "Aksi",
                            accessor: "id",
