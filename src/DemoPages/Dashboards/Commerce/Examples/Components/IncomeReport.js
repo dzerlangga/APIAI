@@ -4,6 +4,7 @@ import ReactTable from "react-table";
 import { ResponsiveContainer } from 'recharts';
 
 export default class IncomeReport extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -15,20 +16,21 @@ export default class IncomeReport extends Component {
         
         this.tguru = this.tguru.bind(this);
         this.editguru = this.editguru.bind(this);
-      this.handleChange = this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.dataedit = this.dataedit.bind(this);
     }
     
     componentDidMount() {
-        fetch("https://jsonplaceholder.typicode.com/photos")
+      fetch("https://jsonplaceholder.typicode.com/users")
         .then(res => res.json())
         .then(parsedJSON => parsedJSON.map(data => (
             {
-                album: data.albumId,
                 id: data.id,
-                title: data.title,
-                status: data.url,
-                gambar: data.thumbnailUrl
+                name: data.name,
+                username: data.username,
+                email: data.email,
+            addres4: data.phone
+               
             }
             )))
             .then(items => this.setState({
@@ -51,9 +53,9 @@ export default class IncomeReport extends Component {
             });
         }
         
-        handleChange(albumId, value) {
+        handleChange(id, value) {
             var d = Object.assign({}, this.state.editdata)
-            Object.assign(d, { [albumId]: value })
+            Object.assign(d, { [id]: value })
             this.setState({
                 editdata: d
             });
@@ -63,7 +65,8 @@ export default class IncomeReport extends Component {
     }
 
     deletedata(id){
-      console.log(id);
+      // console.log(id);
+
       const { items } = this.state;
        this.setState({
         items:items.filter(item => item.id !== id)
@@ -72,7 +75,7 @@ export default class IncomeReport extends Component {
     }
 
     tambahguru(){
-      fetch('https://jsonplaceholder.typicode.com/photos', {
+      fetch('https://jsonplaceholder.typicode.com/users', {
         method: 'POST',
         body: JSON.stringify({
           albumId: this.state.editdata.album,
@@ -88,12 +91,12 @@ export default class IncomeReport extends Component {
     }
 
   dataedit(id,value){
-    fetch('https://jsonplaceholder.typicode.com/photos/1', {
+    fetch('https://jsonplaceholder.typicode.com/users', {
       method: 'put',
       body: JSON.stringify({
-        albumId: this.state.editdata.album,
-        title: this.state.editdata.title,
-        status: this.state.editdata.status
+        id: this.state.editdata.id,
+        name: this.state.editdata.name,
+        email: this.state.editdata.email
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
@@ -181,7 +184,7 @@ render() {
 
            <Modal isOpen={this.state.edit} toggle={this.editguru} className={this.props.className}>
                <Form>
-                   <ModalHeader toggle={this.editguru}  >Modal title</ModalHeader>
+                   <ModalHeader toggle={this.editguru} >Modal title</ModalHeader>
                <ModalBody>
                    
                        <FormGroup row>
@@ -194,36 +197,36 @@ render() {
                        </FormGroup>
 
                        <FormGroup row>
-                           <Label for="exampleEmail" sm={4}>ID Album</Label>
+                           <Label for="exampleEmail" sm={4}>Nama</Label>
                            <Col sm={8}>
-                               <Input type="text" value={this.state.editdata ? this.state.editdata.album : ""}
-                                   onChange={(d) => this.handleChange('album', d.target.value)}
+                               <Input type="text" value={this.state.editdata ? this.state.editdata.name : ""}
+                                   onChange={(d) => this.handleChange('name', d.target.value)}
                                    name="idalbum" />
                            </Col>
                        </FormGroup>
 
                        <FormGroup row>
-                           <Label for="exampleEmail" sm={4}>Title</Label>
+                           <Label for="exampleEmail" sm={4}>No hp</Label>
                            <Col sm={8}>
-                               <Input type="text" value={this.state.editdata ? this.state.editdata.title : ""}
-                                   onChange={(d) => this.handleChange('title', d.target.value)}
+                               <Input type="text" value={this.state.editdata ? this.state.editdata.addres4 : ""}
+                                   onChange={(d) => this.handleChange('addres4', d.target.value)}
                                    name="album" />
                            </Col>
                        </FormGroup>
 
                        <FormGroup row>
-                           <Label for="exampleEmail2" sm={4}>URL 1</Label>
+                           <Label for="exampleEmail2" sm={4}>Username</Label>
                            <Col sm={8}>
-                               <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.status : ""} 
-                               onChange={(d) => this.handleChange('status', d.target.value)} placeholder="default" />
+                               <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.username : ""} 
+                               onChange={(d) => this.handleChange('username', d.target.value)} placeholder="default" />
                            </Col>
                        </FormGroup>
 
                        <FormGroup row>
-                           <Label for="exampleEmail2" sm={4}>URL 2</Label>
+                           <Label for="exampleEmail2" sm={4}>Email</Label>
                            <Col sm={8}>
-                               <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.gambar : ""}
-                                   onChange={(d) => this.handleChange('gambar', d.target.value)} placeholder="default" />
+                               <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.email : ""}
+                                   onChange={(d) => this.handleChange('email', d.target.value)} placeholder="default" />
                            </Col>
                        </FormGroup>
 
@@ -264,11 +267,15 @@ render() {
                        columns: [
                          {
                            Header: "ID",
-                           accessor: "id"
+                           accessor: "id",
                          },
                          {
-                           Header: "Title",
-                           accessor: "title"
+                           Header: "Name",
+                           accessor: "name",
+                         },
+                         {
+                           Header: "No HP",
+                           accessor: "addres4",
                          }
                        ]
                      },
