@@ -61,9 +61,41 @@ export default class IncomeReport extends Component {
         }, 1500)
     }
 
+    deletedata(id){
+      console.log(id);
+      const { items } = this.state;
+       this.setState({
+        items:items.filter(item => item.id !== id)
+      })
+
+    }
+
+  dataedit(id,value){
+    // const API = 'https://jsonplaceholder.typicode.com/photos';
+    //   const dataform = new dataform();
+    //   dataform.append('albumId',value);
+      
+    //   const option = {
+    //     method:'post',
+    //     body: dataform
+    //   }
+
+    //   fetch(API,option)
+    //   .then(res => res.json())
+    //   .then(
+    //     (result) => {
+    //       this.setState({
+    //         response: result,
+    //       })
+    //     }
+    //   )
+    console.log(value);
+
+    }
 
 
 render() {
+
     const { items } = this.state;
 
    return (
@@ -131,25 +163,50 @@ render() {
 {/* Modal Edit Guru */}
 
            <Modal isOpen={this.state.edit} toggle={this.editguru} className={this.props.className}>
-               <Form>
+               <Form >
                    <ModalHeader toggle={this.editguru}  >Modal title</ModalHeader>
                <ModalBody>
                    
-
                        <FormGroup row>
                            <Label for="exampleEmail" sm={2}>ID</Label>
                            <Col sm={10}>
-                               <Input type="text" value={this.state.editdata ? this.state.editdata.id : ""}
+                               <Input type="text" id="id" value={this.state.editdata ? this.state.editdata.id : ""}
                                onChange={(d) => this.handleChange('id', d.target.value)} 
                                name="album" />
                            </Col>
                        </FormGroup>
 
                        <FormGroup row>
-                           <Label for="exampleEmail2" sm={2}>Status</Label>
+                           <Label for="exampleEmail" sm={2}>ID Album</Label>
+                           <Col sm={10}>
+                               <Input type="text" value={this.state.editdata ? this.state.editdata.album : ""}
+                                   onChange={(d) => this.handleChange('album', d.target.value)}
+                                   name="album" />
+                           </Col>
+                       </FormGroup>
+
+                       <FormGroup row>
+                           <Label for="exampleEmail" sm={2}>Title</Label>
+                           <Col sm={10}>
+                               <Input type="text" value={this.state.editdata ? this.state.editdata.title : ""}
+                                   onChange={(d) => this.handleChange('title', d.target.value)}
+                                   name="album" />
+                           </Col>
+                       </FormGroup>
+
+                       <FormGroup row>
+                           <Label for="exampleEmail2" sm={2}>URL 1</Label>
                            <Col sm={10}>
                                <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.status : ""} 
                                onChange={(d) => this.handleChange('status', d.target.value)} placeholder="default" />
+                           </Col>
+                       </FormGroup>
+
+                       <FormGroup row>
+                           <Label for="exampleEmail2" sm={2}>URL 2</Label>
+                           <Col sm={10}>
+                               <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.gambar : ""}
+                                   onChange={(d) => this.handleChange('gambar', d.target.value)} placeholder="default" />
                            </Col>
                        </FormGroup>
 
@@ -157,8 +214,8 @@ render() {
                </ModalBody>
 
                <ModalFooter>
+             <Button color="primary" value={this.state.editdata ? this.state.editdata.id : ""} onClick={(a) => this.dataedit('id', a.target.value)}>Edit</Button>
                    <Button color="danger" onClick={this.editguru}>Cancel</Button>
-                   <Button color="primary" onClick={this.guru}>Edit</Button>
                </ModalFooter>
                </Form>
            </Modal>
@@ -207,13 +264,13 @@ render() {
                          },
                          {
                            Header: "Aksi",
-                           accessor: "aksi",
+                           accessor: "id",
                            Cell: row => (
                              <div className="d-block w-100 text-center">
                                <Button outline className="mb-2 mr-2 btn-dashed btn-shadow-info active" onClick={() => this.editguru(row)} color="info">
                                  <i className="pe-7s-look" />
                                </Button>
-                               <Button outline className="mb-2 mr-2 btn-dashed btn-shadow-danger active" color="danger">
+                               <Button outline className="mb-2 mr-2 btn-dashed btn-shadow-danger active" onClick={() => this.deletedata(row.original.id)}  color="danger">
                                  <i className="pe-7s-trash" />
                                </Button>
                              </div>
