@@ -19,7 +19,6 @@ export default class IncomeReport extends Component {
         this.tguru = this.tguru.bind(this);
         this.editguru = this.editguru.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.dataedit = this.dataedit.bind(this);
     }
     
     componentDidMount() {
@@ -31,7 +30,8 @@ export default class IncomeReport extends Component {
                 name: data.name,
                 username: data.username,
                 email: data.email,
-               phone: data.phone
+               phone: data.phone,
+              
                
             }
             )))
@@ -43,31 +43,31 @@ export default class IncomeReport extends Component {
         }
         
         tambahguru(){
-          const post = {
-            id: this.state.editdata.id,
+          const posts = {
             email: this.state.editdata.email,
             phone: this.state.editdata.phone,
             username: this.state.editdata.username,
             name: this.state.editdata.name,
           }
 
-          axios.post('https://jsonplaceholder.typicode.com/users',post)
+          axios.post('https://jsonplaceholder.typicode.com/users',posts)
             .then(response => {
-              if (response.status === 201) {
-
+            console.log(response.data);
                 let postId = response.data;
-                const newPost = Object.assign({}, response.data.post, postId)
+                const newPost = Object.assign({}, response.data.id, postId)
 
                 this.setState(prevState => ({
-                  items: [...prevState.items, newPost]
+                  items: [...prevState.items, newPost],
+                  modal : false,
                 }))
-              }
+
+  
+              
             })
       }
 
       dataedit(){
         const post = {
-          id: this.state.editdata.id,
           email: this.state.editdata.email,
           phone: this.state.editdata.phone,
         username: this.state.editdata.username,
@@ -81,7 +81,8 @@ export default class IncomeReport extends Component {
       const edit = items.findIndex(item => postId === item.id)
       items[edit] = response.data;
       this.setState({
-        items
+        items,
+        edit:false
       })
     })
 }
@@ -114,7 +115,7 @@ deletedata(id){
 // console.log(id);
 const { items } = this.state;
  this.setState({
-  items:items.filter(item => item.id !== id)
+  items:items.filter(item => item.phone !== id)
 })
 
 }
@@ -136,49 +137,41 @@ render() {
                <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
 
                <ModalBody>
-                  
-             <FormGroup>
-               <Col sm={8}>
-                 <Input type="hidden" id="id" value={this.state.editdata ? this.state.editdata.id : ""}
-                   onChange={(d) => this.handleChange('id', d.target.value)}
-                   name="album" />
-               </Col>
-             </FormGroup>
 
              <FormGroup>
-               <Label for="exampleEmail" sm={4}>ID Album</Label>
+               <Label for="exampleEmail" sm={4}>Nama</Label>
                <Col sm={8}>
                  <Input type="text" value={this.state.editdata ? this.state.editdata.name : ""}
-                   onChange={(d) => this.handleChange('album', d.target.value)}
-                   name="album" />
+                   onChange={(d) => this.handleChange('name', d.target.value)}
+                   name="album" placeholder="Nama" />
                </Col>
              </FormGroup>
 
              <FormGroup>
-               <Label for="exampleEmail" sm={4}>Title</Label>
+               <Label for="exampleEmail" sm={4}>email</Label>
                <Col sm={8}>
-                 <Input type="text" value={this.state.editdata ? this.state.editdata.phone  : ""}
-                   onChange={(d) => this.handleChange('title', d.target.value)}
-                   name="album" />
+                 <Input type="email" value={this.state.editdata ? this.state.editdata.email  : ""}
+                   onChange={(d) => this.handleChange('email', d.target.value)}
+                   name="email" placeholder="email" required />
                </Col>
              </FormGroup>
 
              <FormGroup>
-               <Label for="exampleEmail2" sm={4}>URL 1</Label>
+               <Label for="exampleEmail" sm={4}>username</Label>
                <Col sm={8}>
-                 <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.phone : ""}
-                   onChange={(d) => this.handleChange('status', d.target.value)} placeholder="default" />
+                 <Input type="text" value={this.state.editdata ? this.state.editdata.username : ""}
+                   onChange={(d) => this.handleChange('username', d.target.value)}
+                   name="username" placeholder="username"/>
                </Col>
              </FormGroup>
 
              <FormGroup>
-               <Label for="exampleEmail2" sm={4}>URL 2</Label>
+               <Label for="exampleEmail" sm={4}>No HP</Label>
                <Col sm={8}>
-                 <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.gambar : ""}
-                   onChange={(d) => this.handleChange('gambar', d.target.value)} placeholder="default" />
+                 <Input type="text" name="phone" value={this.state.editdata ? this.state.editdata.phone : ""}
+                   onChange={(d) => this.handleChange('phone', d.target.value)} placeholder="No Handphone" />
                </Col>
              </FormGroup>
-
                    
                </ModalBody>
 
@@ -270,10 +263,7 @@ render() {
                      {
                        Header: "Identitas",
                        columns: [
-                         {
-                           Header: "ID",
-                           accessor: "id",
-                         },
+                       
                          {
                            Header: "Name",
                            accessor: "name",
@@ -295,7 +285,7 @@ render() {
                                <Button outline className="mb-2 mr-2 btn-dashed btn-shadow-info active" onClick={() => this.editguru(row)} color="info">
                                  <i className="pe-7s-look" />
                                </Button>
-                               <Button outline className="mb-2 mr-2 btn-dashed btn-shadow-danger active" onClick={() => this.deletedata(row.original.id)}  color="danger">
+                               <Button outline className="mb-2 mr-2 btn-dashed btn-shadow-danger active" onClick={() => this.deletedata(row.original.phone)}  color="danger">
                                  <i className="pe-7s-trash" />
                                </Button>
                              </div>
