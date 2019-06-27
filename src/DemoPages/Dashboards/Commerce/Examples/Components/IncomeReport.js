@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {Col,Button,CardHeader,Card,CardBody,Input,Modal,ModalHeader,ModalBody,ModalFooter,Form,FormGroup,Label,} from "reactstrap";
 import ReactTable from "react-table";
 import { ResponsiveContainer } from 'recharts';
+import axios from 'axios';
 
 export default class IncomeReport extends Component {
 
@@ -12,6 +13,7 @@ export default class IncomeReport extends Component {
           items: [],
           editdata: null,
           edit: false
+
         };
         
         this.tguru = this.tguru.bind(this);
@@ -29,7 +31,7 @@ export default class IncomeReport extends Component {
                 name: data.name,
                 username: data.username,
                 email: data.email,
-            addres4: data.phone
+               phone: data.phone
                
             }
             )))
@@ -40,73 +42,83 @@ export default class IncomeReport extends Component {
             .catch(error => alert('gagal mengambil data API', error))
         }
         
-        tguru() {
-            this.setState({
-                modal: !this.state.modal
-            });
-        }
-        
-        editguru(items) {
-            this.setState({
-                editdata: items.original,
-                edit: !this.state.edit
-            });
-        }
-        
-        handleChange(id, value) {
-            var d = Object.assign({}, this.state.editdata)
-            Object.assign(d, { [id]: value })
-            this.setState({
-                editdata: d
-            });
-            setTimeout(() => {
-            console.log(this.state)
-        }, 1500)
-    }
+        tambahguru(){
+          const post = {
+            id: this.state.editdata.id,
+            email: this.state.editdata.email,
+            phone: this.state.editdata.phone,
+            username: this.state.editdata.username,
+            name: this.state.editdata.name,
+          }
 
-    deletedata(id){
-      // console.log(id);
+          axios.post('https://jsonplaceholder.typicode.com/users',post)
+            .then(response => {
+              if (response.status === 201) {
 
-      const { items } = this.state;
-       this.setState({
-        items:items.filter(item => item.id !== id)
-      })
+                let postId = response.data;
+                const newPost = Object.assign({}, response.data.post, postId)
 
-    }
-
-    tambahguru(){
-      fetch('https://jsonplaceholder.typicode.com/users', {
-        method: 'POST',
-        body: JSON.stringify({
-          albumId: this.state.editdata.album,
-          title: this.state.editdata.title,
-          status: this.state.editdata.status
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        }
-      })
-        .then(response => response.json())
-        .then(json => console.log(json))
-    }
-
-  dataedit(id,value){
-    fetch('https://jsonplaceholder.typicode.com/users', {
-      method: 'put',
-      body: JSON.stringify({
-        id: this.state.editdata.id,
-        name: this.state.editdata.name,
-        email: this.state.editdata.email
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
+                this.setState(prevState => ({
+                  items: [...prevState.items, newPost]
+                }))
+              }
+            })
       }
+
+      dataedit(){
+        const post = {
+          id: this.state.editdata.id,
+          email: this.state.editdata.email,
+          phone: this.state.editdata.phone,
+        username: this.state.editdata.username,
+           name: this.state.editdata.name,
+      }
+    
+       axios.put('https://jsonplaceholder.typicode.com/users/1' , post)
+        .then(response => {
+       let postId = this.state.editdata.id;
+      const items = [...this.state.items];
+      const edit = items.findIndex(item => postId === item.id)
+      items[edit] = response.data;
+      this.setState({
+        items
+      })
     })
-      .then(response => response.json())
-      .then(json => console.log(json))
+}
+  
+  tguru() {
+      this.setState({
+          modal: !this.state.modal
+      });
+  }
+  
+  editguru(items) {
+      this.setState({
+          editdata: items.original,
+          edit: !this.state.edit
+      });
+  }
+  
+  handleChange(id, value) {
+      var d = Object.assign({}, this.state.editdata)
+      Object.assign(d, { [id]: value })
+      this.setState({
+          editdata: d
+      });
+      setTimeout(() => {
+      console.log(this.state)
+  }, 1500)
+}
 
-    }
+deletedata(id){
+// console.log(id);
+const { items } = this.state;
+ this.setState({
+  items:items.filter(item => item.id !== id)
+})
 
+}
+  
 render() {
 
     const { items } = this.state;
@@ -126,9 +138,8 @@ render() {
                <ModalBody>
                   
              <FormGroup>
-               <Label for="exampleEmail" sm={4}>ID</Label>
                <Col sm={8}>
-                 <Input type="text" id="id" value={this.state.editdata ? this.state.editdata.id : ""}
+                 <Input type="hidden" id="id" value={this.state.editdata ? this.state.editdata.id : ""}
                    onChange={(d) => this.handleChange('id', d.target.value)}
                    name="album" />
                </Col>
@@ -137,7 +148,7 @@ render() {
              <FormGroup>
                <Label for="exampleEmail" sm={4}>ID Album</Label>
                <Col sm={8}>
-                 <Input type="text" value={this.state.editdata ? this.state.editdata.album : ""}
+                 <Input type="text" value={this.state.editdata ? this.state.editdata.name : ""}
                    onChange={(d) => this.handleChange('album', d.target.value)}
                    name="album" />
                </Col>
@@ -146,7 +157,7 @@ render() {
              <FormGroup>
                <Label for="exampleEmail" sm={4}>Title</Label>
                <Col sm={8}>
-                 <Input type="text" value={this.state.editdata ? this.state.editdata.title : ""}
+                 <Input type="text" value={this.state.editdata ? this.state.editdata.phone  : ""}
                    onChange={(d) => this.handleChange('title', d.target.value)}
                    name="album" />
                </Col>
@@ -155,7 +166,7 @@ render() {
              <FormGroup>
                <Label for="exampleEmail2" sm={4}>URL 1</Label>
                <Col sm={8}>
-                 <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.status : ""}
+                 <Input type="text" name="email" value={this.state.editdata ? this.state.editdata.phone : ""}
                    onChange={(d) => this.handleChange('status', d.target.value)} placeholder="default" />
                </Col>
              </FormGroup>
@@ -186,19 +197,13 @@ render() {
                <Form>
                    <ModalHeader toggle={this.editguru} >Modal title</ModalHeader>
                <ModalBody>
-                   
-                       <FormGroup row>
-                           <Label for="exampleEmail" sm={4}>ID</Label>
-                           <Col sm={8}>
-                               <Input type="text" id="id" value={this.state.editdata ? this.state.editdata.id : ""}
-                               onChange={(d) => this.handleChange('id', d.target.value)} 
-                               name="ID" />
-                           </Col>
-                       </FormGroup>
 
                        <FormGroup row>
                            <Label for="exampleEmail" sm={4}>Nama</Label>
                            <Col sm={8}>
+                 <Input type="hidden" id="id" value={this.state.editdata ? this.state.editdata.id : ""}
+                   onChange={(d) => this.handleChange('id', d.target.value)}
+                   name="ID" />
                                <Input type="text" value={this.state.editdata ? this.state.editdata.name : ""}
                                    onChange={(d) => this.handleChange('name', d.target.value)}
                                    name="idalbum" />
@@ -208,8 +213,8 @@ render() {
                        <FormGroup row>
                            <Label for="exampleEmail" sm={4}>No hp</Label>
                            <Col sm={8}>
-                               <Input type="text" value={this.state.editdata ? this.state.editdata.addres4 : ""}
-                                   onChange={(d) => this.handleChange('addres4', d.target.value)}
+                               <Input type="text" value={this.state.editdata ? this.state.editdata.phone : ""}
+                                   onChange={(d) => this.handleChange('phone', d.target.value)}
                                    name="album" />
                            </Col>
                        </FormGroup>
@@ -234,7 +239,7 @@ render() {
                </ModalBody>
 
                <ModalFooter>
-             <Button color="primary" value={this.state.editdata ? this.state.editdata.id : ""} onClick={(a) => this.dataedit('id', a.target.value)}>Edit</Button>
+             <Button color="primary" value={this.state.editdata ? this.state.editdata.id : ""} onClick={(a) => this.dataedit('id', a.target.value) }>Edit</Button>
                    <Button color="danger" onClick={this.editguru}>Cancel</Button>
                </ModalFooter>
                </Form>
@@ -275,7 +280,7 @@ render() {
                          },
                          {
                            Header: "No HP",
-                           accessor: "addres4",
+                           accessor: "phone",
                          }
                        ]
                      },
@@ -298,7 +303,6 @@ render() {
                          }
                        ]
                      }
-
                    ]}
                    defaultPageSize={20}
                    style={{ height: "428px"}}
