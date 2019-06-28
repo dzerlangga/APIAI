@@ -11,27 +11,16 @@ import IncomeReport2 from '../Commerce/Examples/Components/IncomeReport2';
 import classnames from 'classnames';
 
 import {
-    Row, Col,
+    Col,Nav,
     Button,
     CardHeader,
-    Table,
-    ButtonGroup,
-    Nav,
     NavItem,
     NavLink,
     TabContent,
     TabPane,
-
     Card,
     CardBody,
-    CardFooter,
-    CardTitle,
-    Container,
-    ListGroup,
-    ListGroupItem,
-    CustomInput, Input,
-    Dropdown, DropdownItem, DropdownToggle, DropdownMenu,
-    UncontrolledButtonDropdown,
+
     Modal, ModalHeader, ModalBody, ModalFooter
 
 } from 'reactstrap';
@@ -41,25 +30,10 @@ import ReactTable from "react-table";
 
 import {
     ResponsiveContainer,
-    BarChart,
-    Bar,
-    LineChart,
-    Tooltip,
-    Line
+
 } from 'recharts';
 
-import CountUp from 'react-countup';
 
-import {
-    faAngleUp,
-    faAngleDown,
-    faCommentDots,
-    faBullhorn,
-    faBusinessTime,
-    faCog
-} from '@fortawesome/free-solid-svg-icons';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default class MinimalDashboard2 extends Component {
 

@@ -21,20 +21,20 @@ import ThemeOptions from '../../Layout/ThemeOptions/';
 
 const Dashboards = ({match}) => (
     <Fragment>
-        <ThemeOptions/>
-        <AppHeader/>
+        <ThemeOptions />
+        <AppHeader />
         <div className="app-main">
-            <AppSidebar/>
+            <AppSidebar />
             <div className="app-main__outer">
                 <div className="app-main__inner">
-                    <Route path={`${match.url}/analytics`} component={AnalyticsDashboard}/>
-                    <Route path={`${match.url}/sales`} component={SalesDashboard}/>
-                    <Route path={`${match.url}/commerce`} component={CommerceDashboard}/>
-                    <Route path={`${match.url}/crm`} component={CRMDashboard}/>
-                    <Route path={`${match.url}/minimal-dashboard-1`} component={MinimalDashboard1}/>
-                    <Route path={`${match.url}/minimal-dashboard-2`} component={MinimalDashboard2}/>
+                    <Route path={`${match.url}/analytics`} component={AnalyticsDashboard} />
+                    <Route path={`${match.url}/sales`} component={SalesDashboard} />
+                    <Route path={`${match.url}/commerce`} component={CommerceDashboard} />
+                    <Route path={`${match.url}/crm`} component={CRMDashboard} />
+                    <Route path={`${match.url}/minimal-dashboard-1`} component={MinimalDashboard1} />
+                    <Route path={`${match.url}/minimal-dashboard-2`} component={MinimalDashboard2} />
                 </div>
-                <AppFooter/>
+                <AppFooter />
             </div>
         </div>
     </Fragment>
